@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+import { getDefaultProfileImage } from '../firebase/firebase.js';
+
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -29,6 +31,24 @@ export const isAdmin = (req, res, next) => {
     req.user = user;
     next();
   });
+};
+
+
+const setProfileImageUrls = async (req, res, next) => {
+
+  try {
+    if (res.locals.userData) {
+      const user = res.locals.userData;
+      
+      if (user.profileImage === "default") {
+        user.profileImage = await getDefaultProfileImage();
+      }
+    }
+    next();
+  } catch (error) {
+    console.error("Error procesando imágenes:", error);
+    next();
+  }
 };
 
 export default authenticateToken;

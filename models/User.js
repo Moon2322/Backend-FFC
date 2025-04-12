@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, "La contraseña es obligatoria"]
     },
-    rol: { // 🆕 Añadir este campo
+    rol: { 
         type: String,
         enum: ['usuario', 'peleador', 'admin'],
         default: 'usuario'
@@ -47,7 +47,11 @@ const UserSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    profileImage: {
+        type: String,
+        default: "default" 
+      }
 });
 
 // Middleware para actualizar la fecha de modificación

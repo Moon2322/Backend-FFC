@@ -9,6 +9,8 @@ import verifyRoutes from './api/verifyRoutes.js';
 import forgotPassword from './api/forgotPassword.js';
 import peleadorRoutes from './api/peleadorRoutes.js'; // Nueva importación
 import eventosRoutes from './api/eventosRoutes.js';
+import usersRoutes from './api/usersRoutes.js';
+
 
 
 dotenv.config();
@@ -27,6 +29,8 @@ app.use('/api', verifyRoutes);
 app.use('/api', forgotPassword);
 app.use('/api', peleadorRoutes); // Nueva ruta
 app.use('/api', eventosRoutes);
+app.use('/api', usersRoutes);
+
 
 
 // Puerto del servidor

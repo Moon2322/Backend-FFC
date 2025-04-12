@@ -97,29 +97,39 @@ router.post('/peleador', authenticateToken, async (req, res) => {
 
 // Obtener todos los peleadores
 router.get('/peleadores', authenticateToken, async (req, res) => {
-    try {
-        const peleadores = await Peleador.find()
-            .select('-__v -createdAt -updatedAt')
-            .limit(50);
-            
-        res.json(peleadores);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+      const peleadores = await Peleador.find()
+          .select('-__v -createdAt -updatedAt')
+          .populate({
+              path: 'userId', // <- el nombre del virtual que declaraste
+              select: 'profileImage' // <- solo traes la imagen
+          })
+          .limit(50);
+
+      res.json(peleadores);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
 });
+
 
 // Obtener los últimos 3 peleadores registrados
 router.get('/latest', authenticateToken, async (req, res) => {
-    try {
-        const peleadores = await Peleador.find()
-            .sort({ createdAt: -1 }) // Ordenar por los más recientes
-            .limit(3) // Solo 3 resultados
-            .select('nombre fotoPerfil peso estatura estiloCombate');
-            
-        res.json(peleadores);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+      const peleadores = await Peleador.find()
+          .sort({ createdAt: -1 }) // Ordenar por los más recientes
+          .limit(3) // Solo 3 resultados
+          .select('nombre peso estatura estiloCombate userId') // `fotoPerfil` ya no se usa si vas por `usuario.profileImage`
+          .populate({
+              path: 'userId',
+              select: 'profileImage' // Solo traemos la imagen
+          });
+
+      res.json(peleadores);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
 });
+
 
 export default router;
